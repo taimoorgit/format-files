@@ -86,6 +86,12 @@
             "type": "boolean",
             "description": "If the workspace folder is a git repository, skips files that git ignores",
             "default": true
+          },
+          "formatFiles.lastBranch": {
+            "scope": "application",
+            "type": "string",
+            "description": "Last branch name used for branch-based formatting",
+            "default": ""
           }
         }
       }
