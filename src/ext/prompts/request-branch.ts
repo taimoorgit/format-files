@@ -8,7 +8,7 @@ const LAST_BRANCH_KEY = 'formatFiles.lastBranch';
 export async function requestBranch(): Promise<string> {
   const lastBranch = getLastBranch();
   const placeholder = lastBranch ? `Enter target branch (last used: ${lastBranch})` : 'Enter target branch (e.g., main, master, develop)';
-  
+
   const maybeBranch = await window.showInputBox({
     ignoreFocusOut: true,
     placeHolder: placeholder,

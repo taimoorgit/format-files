@@ -91,12 +91,12 @@ async function fromBranch(): Promise<void> {
     const targetBranch = await prompts.requestBranch();
     const git = new Git();
     const files = git.getChangedFiles(targetBranch, workspaceFolder.uri);
-    
+
     if (files.length === 0) {
       await prompts.confirmStart(`No files changed compared to '${targetBranch}'. Nothing to format.`);
       return;
     }
-    
+
     await prompts.confirmStart(`Format Files: Start formatting ${files.length} files changed since '${targetBranch}'?`);
     await formatFiles(files);
 

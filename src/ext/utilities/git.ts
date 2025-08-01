@@ -36,19 +36,19 @@ export class Git {
 
   public getChangedFiles(targetBranch: string, workspaceFolder: Uri): Uri[] {
     this._logger.info(`getting files changed compared to branch: ${targetBranch}`);
-    
+
     try {
-      const result = this.executeGit({ 
-        args: ['diff', '--name-only', targetBranch], 
+      const result = this.executeGit({
+        args: ['diff', '--name-only', targetBranch],
         cwd: workspaceFolder.fsPath,
       });
-      
+
       const changedFiles = result
         .trim()
         .split('\n')
         .filter(file => file.length > 0)
         .map(file => Uri.file(path.join(workspaceFolder.fsPath, file)));
-      
+
       this._logger.info(`found ${changedFiles.length} changed files:\n${changedFiles.map(f => f.fsPath).join('\n')}`);
       return changedFiles;
     }
