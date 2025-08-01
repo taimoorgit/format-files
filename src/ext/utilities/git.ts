@@ -1,7 +1,7 @@
 import { extensions, Uri } from 'vscode';
 import { Logger } from './logger';
 import { execFileSync } from 'child_process';
-import * as path from 'path';
+import { join } from 'path';
 
 export class Git {
   private _logger = new Logger('git');
@@ -47,7 +47,7 @@ export class Git {
         .trim()
         .split('\n')
         .filter(file => file.length > 0)
-        .map(file => Uri.file(path.join(workspaceFolder.fsPath, file)));
+        .map(file => Uri.file(join(workspaceFolder.fsPath, file)));
 
       this._logger.info(`found ${changedFiles.length} changed files:\n${changedFiles.map(f => f.fsPath).join('\n')}`);
       return changedFiles;
