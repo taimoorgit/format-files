@@ -6,6 +6,7 @@ import { formatFiles } from './ext/commands/format-files';
 import { validateInWorkspace } from './ext/commands/validate-in-workspace';
 import { Config } from './ext/utilities/config';
 import { FileQueryApi } from './ext/queries/file-query-api';
+import { Git } from './ext/utilities/git';
 
 const logger = new Logger('ext');
 
@@ -24,6 +25,10 @@ export function activate(context: ExtensionContext): void {
     context,
     Constants.formatFilesFromGlob,
     fromGlob);
+  registerCommand(
+    context,
+    Constants.formatFilesFromBranch,
+    fromBranch);
 
   logger.info('activated');
 }
@@ -67,6 +72,32 @@ async function fromGlob(): Promise<void> {
     const useDefaultExcludes = await prompts.useDefaultExcludes();
     const files = await FileQueryApi.getWorkspaceFilesWithGlob(workspaceFolder, { glob, useDefaultExcludes });
     await prompts.confirmStart(`Format Files: Start formatting ${files.length} workspace files using glob '${glob}'?`);
+    await formatFiles(files);
+
+    logger.info(`Format Files completed`);
+  }
+  catch (error) {
+    logger.error(error);
+  }
+}
+
+async function fromBranch(): Promise<void> {
+  try {
+    Config.load();
+    openOutputChannel();
+    logger.info(`Starting Format Files - By Branch Changes`);
+    validateInWorkspace();
+    const workspaceFolder = await prompts.selectWorkspaceFolder();
+    const targetBranch = await prompts.requestBranch();
+    const git = new Git();
+    const files = git.getChangedFiles(targetBranch, workspaceFolder.uri);
+    
+    if (files.length === 0) {
+      await prompts.confirmStart(`No files changed compared to '${targetBranch}'. Nothing to format.`);
+      return;
+    }
+    
+    await prompts.confirmStart(`Format Files: Start formatting ${files.length} files changed since '${targetBranch}'?`);
     await formatFiles(files);
 
     logger.info(`Format Files completed`);

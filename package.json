@@ -22,7 +22,8 @@
   "activationEvents": [
     "onCommand:formatFiles.start.workspace",
     "onCommand:formatFiles.start.workspaceFolder",
-    "onCommand:formatFiles.start.fromGlob"
+    "onCommand:formatFiles.start.fromGlob",
+    "onCommand:formatFiles.start.fromBranch"
   ],
   "main": "./out/extension",
   "extensionDependencies": [
@@ -102,6 +103,10 @@
       {
         "command": "formatFiles.start.fromGlob",
         "title": "Start Format Files: From Glob"
+      },
+      {
+        "command": "formatFiles.start.fromBranch",
+        "title": "Start Format Files: Changed in Branch"
       }
     ],
     "menus": {
